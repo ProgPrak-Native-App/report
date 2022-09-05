@@ -202,10 +202,20 @@ Ein besonders wichtiger Starkmacher ist das Sicherheitsnetz. Dort trägt der Nut
 ### Sicherheitsnetzeinträge im Frontend
 Zunächst wurde der Datentyp "SafetyDType" definiert, welcher die eingetragenen Daten des Nutzers durch den Erstellungsprozess eines Sicherheitsnetzeintrags trägt.
 SafetyNetDType besteht aus vier Teilen:
-1.	"id" ist eine im Backend generierte Nummer, die den Eintrag eindeutig identifiziert
-2.	"type" ist der vom Nutzer eingetragene Typ des Eintrags
-3.	"name" ist ist der vom Nutzer eingetragene Titel des Eintrags
-4.	"strategies" ist ein Array aus drei Strings, von denen mindestens einer ein nicht-leerer string sein muss
+
+````tsx
+export type SafetyNetDType = {
+  id: number;
+  type: string;
+  name: string;
+  strategies: [string, string, string];
+};
+````
+
+1.  "id" ist eine im Backend generierte Nummer, die den Eintrag eindeutig identifiziert
+2.  "type" ist der vom Nutzer eingetragene Typ des Eintrags
+3.  "name" ist ist der vom Nutzer eingetragene Titel des Eintrags
+4.  "strategies" ist ein Array aus drei Strings, von denen mindestens einer ein nicht-leerer string sein muss
 
 
 ### Verwendung des Sicherheitsnetzes
@@ -214,30 +224,78 @@ Die Erstellung eines Sicherheitsnetzeintrages in der App besteht aus zwei Schrit
 Im ersten Schritt trägt der Nutzer einen Titel ein und wählt eine, von fünf möglichen, Kategorien für den Sicherheitsnetzeintrag.
 Der eingetragene Titel wird unter "name" gespeichert und das ausgewählte Icon bestimmt den "type" (z.B. Pfotenicon -> "type": "pets"). Nach Bestätigung durch den Nutzer wird überprüft ob ein "name" und "type" angegeben wurden und an den zweiten Schritt weitergeleitet.
 
+<img alt="Safety-Net step 1" src="assets/security-net1.jpg" height="500">
+
 Im zweiten Schritt trägt der Nutzer mindestens eine und maximal drei Strategien ein, wie dieser Sicherheitsnetzeintrag dem Nutzer helfen kann. Diese werden unter "strategies" gespeichert. Hier wird auch überprüft ob am Ende genug Daten (mindestens eine eingetragene Strategie) vorliegt.
+
+<img alt="Safety-Net step 2" src="assets/security-net2.jpg" height="500">
 
 Nach Bestätigung des zweiten Schrittes werden die Daten aus dem SafetyNetDType per POST-Request an das Backend versendet.
 
 ### Kommunikation mit dem Backend
-Um Schreibarbeit zu sparen und die Kommunikation mit dem Backend in einem zentralen Punkt zu halten, wurde die "BaseClient" Klasse erstellt. Diese enthält Archetypen für verschiedene Arten von Anfragen (POST, GET, etc.).
-Zur Nutzung des BaseClients in einem Feature, wird beispielsweise für das Sicherheitsnetz, eine Klasse "SecurityNetClient" erstellt, welche vom BaseClient erbt.
+Um Schreibarbeit zu sparen und die Kommunikation mit dem Backend in einem zentralen Punkt zu halten, wurde die "AuthenticatedBaseClient" Klasse erstellt. Diese enthält Archetypen für verschiedene Arten von Anfragen (POST, GET, etc.), welche per fetch-API,mit der Session-ID im Header, an das Backend versendet werden.
+
+````tsx
+export default class BaseClient {
+  constructor(protected baseUrl: URL | string) {}
+
+  protected async request(method: string, path: string, options?: RequestInit): Promise<Response> {
+    const url = path.includes('://')
+      ? path // absolute
+      : new URL(path, this.baseUrl);
+
+    const response = await fetch(url, {
+      method,
+      ...options,
+    });
+
+    if (response.ok) {
+      return response;
+    } else {
+      throw new Error(`${response.statusText}. Error code ${response.status}.`);
+    }
+  }
+
+  protected async get<R>(path: string, options?: RequestInit): Promise<R> {
+    const response = await this.request('GET', path, options);
+    return await response.json();
+  }
+
+  //...
+}
+````
+
+Zur Nutzung des AuthenticatedBaseClients in einem Feature, wird beispielsweise für das Sicherheitsnetz, eine Klasse "SecurityNetClient" erstellt, welche vom AuthenticatedBaseClient erbt.
 Dort werden die Daten aus dem Frontend und die gewollten Endpunkte (z.B. "/safetyNet" oder "/safetyNet/3") and die Anfragen gebunden.
 Außerdem können mögliche Netzwerkfehler oder unerfolgreiche Anfragen abgefangen werden und Fehlermeldungen ausgegeben werden.
-Alle Anfragen werden im BaseClient per fetch-API an das Backend versendet.
+
+````tsx
+export default class SecurityNetClient extends AuthenticatedBaseClient {
+  public async getItems(): Promise<SafetyNetDType[]> {
+    const result = await this.get<SafetyNetDType[]>('/safetyNet').catch(() => {
+      Alert.alert('Keine Verbindung.', 'Leider besteht zurzeit keine Verbindung zu unserem Server :(');
+      return [];
+    });
+    return result;
+  }
+
+  //...
+}
+````
 
 ### Weitere Features im Sicherheitsnetz
 
 Zusätzlich zum Erstellen von Einträgen hat der Nutzer noch die Möglichkeit alle existierenden Einträge eines Types einzusehen und zu verändern bzw. löschen.
 
-Dafür holt sich der SecurityNetClient per GET-Request alle Einträge eines Nutzers. Diese werden dann nach Typ gefiltert und die resultierende Liste als Kachellayout angezeigt.
+Dafür holt sich der SecurityNetClient per GET-Request alle Einträge eines Nutzers. Diese werden dann nach Typ gefiltert und die resultierende Liste als Kachellayout angezeigt. Dort kann der Nutzer einen erstellten Eintrag auch wieder löschen. Dafür klickt der Nutzer das "X" am Eintrag im Kachellayout an. Daraufhin wird eine DELETE-Request an "safetyNet/{id}" gesendet, um den Eintrag im Backend zu löschen. "id" ist hierbei die dem Eintrag zugewiesene id.
+
+<img alt="Safety-Net list of entries" src="assets/security-net_itemview.png" height="500">
 
 Zum Verändern eines Eintrags kann der Nutzer auf einen der Einträge im Kachellayout klicken und wird dann durch dieselben Schritte wie bei der Erstellung eines Eintrages geleitet.
 Hierbei sind die Daten aus dem bestehenden Eintrag schon in die zugehörigen Felder eingetragen.
-Nach Beendigung wird überprüft, ob der Eintrag tatsächlich verändert wurde, und nur dann per PUT-Request an "/safetyNet/{id}" aktualisiert, wobei "id" die dem Eintrag zugewiesene id repräsentiert. Dadurch werden Verdopplungen von Einträgen vermieden.
+Nach Beendigung wird überprüft, ob der Eintrag tatsächlich verändert wurde, und nur dann per PUT-Request an "/safetyNet/{id}" aktualisiert. Dadurch werden Verdopplungen von Einträgen vermieden.
 
-Schlussendlich kann der Nutzer einen erstellten Eintrag wieder löschen.
-Dafür klickt der Nutzer das "X" am Eintrag im Kachellayout an. Daraufhin wird eine DELETE-Request an "safetyNet/{id}" gesendet, um den Eintrag im Backend zu löschen.
-
+<img alt="Safety-Net modify existing entry" src="assets/security-net_modify_component.png" height="500">
 
 ### Hürden bei der Implementierung
 Bei der Erstellung der Kategoriewahl ist eine Diskrepanz zwischen der Vorgabe von Kopfsachen und den akzeptierten Kategorien der API aufgefallen.
