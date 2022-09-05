@@ -110,8 +110,7 @@ Es wurde ein Authentication Client  geschrieben und verwendet, welcher vom allge
 
 Bei traditionellen Auth-Konzepten mit Benutzername oder E-Mail und Password kann Nutzer:innen zugemutet werden, sich ihre selbst gewählten Zugangsdaten selbst zu merken oder zu sichern, und sie auf neuen Geräten einfach wieder einzugeben. Bei dem bereits beschriebenen Auth-Konzept des Mindtastic-Backends entfallen solche selbstgewählten Pseudonyme und Passwörter jedoch zugunsten eines zufällig generierten, 36-stelligen Codes, dem "Account Key". Hier wären das Abschreiben oder gar das Merken sowie die manuelle Eingabe ein schreckliches Nutzerinnenerlebnis.
 
-Trotzdem halten wir es jedoch für unabdingbar, dass Nutzer:
-innen das gleiche Profil auf mehreren Geräten nutzen können. Deshalb bedarf es einer Methode, den Account Key auf einen anderen Client zu übertragen. Da wir eine mobile App entwickeln, können wir hier Gebrauch von der Kamera machen. Inspiriert von Anwendungen wie Whatsapp Web, Telegram Web oder 2FA-Apps haben wir uns für einen QR-Code entschieden.
+Trotzdem halten wir es jedoch für unabdingbar, dass Nutzer:innen das gleiche Profil auf mehreren Geräten nutzen können. Deshalb bedarf es einer Methode, den Account Key auf einen anderen Client zu übertragen. Da wir eine mobile App entwickeln, können wir hier Gebrauch von der Kamera machen. Inspiriert von Anwendungen wie Whatsapp Web, Telegram Web oder 2FA-Apps haben wir uns für einen QR-Code entschieden.
 
 ### Implementierung
 
