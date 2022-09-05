@@ -289,13 +289,13 @@ Zusätzlich zum Erstellen von Einträgen hat der Nutzer noch die Möglichkeit al
 
 Dafür holt sich der SecurityNetClient per GET-Request alle Einträge eines Nutzers. Diese werden dann nach Typ gefiltert und die resultierende Liste als Kachellayout angezeigt. Dort kann der Nutzer einen erstellten Eintrag auch wieder löschen. Dafür klickt der Nutzer das "X" am Eintrag im Kachellayout an. Daraufhin wird eine DELETE-Request an "safetyNet/{id}" gesendet, um den Eintrag im Backend zu löschen. "id" ist hierbei die dem Eintrag zugewiesene id.
 
-<img alt="Safety-Net list of entries" src="assets/security-net_itemview.png" height="500">
+<img alt="Safety-Net list of entries" src="assets/security-net_itemview.PNG" height="500">
 
 Zum Verändern eines Eintrags kann der Nutzer auf einen der Einträge im Kachellayout klicken und wird dann durch dieselben Schritte wie bei der Erstellung eines Eintrages geleitet.
 Hierbei sind die Daten aus dem bestehenden Eintrag schon in die zugehörigen Felder eingetragen.
 Nach Beendigung wird überprüft, ob der Eintrag tatsächlich verändert wurde, und nur dann per PUT-Request an "/safetyNet/{id}" aktualisiert. Dadurch werden Verdopplungen von Einträgen vermieden.
 
-<img alt="Safety-Net modify existing entry" src="assets/security-net_modify_component.png" height="500">
+<img alt="Safety-Net modify existing entry" src="assets/security-net_modify_component.PNG" height="500">
 
 ### Hürden bei der Implementierung
 Bei der Erstellung der Kategoriewahl ist eine Diskrepanz zwischen der Vorgabe von Kopfsachen und den akzeptierten Kategorien der API aufgefallen.
