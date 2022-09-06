@@ -193,13 +193,13 @@ Außerdem sollte, für den Fall, dass die Kamera des genutzten Smartphones kaput
 
 
 ## Sicherheitsnetz
-Ein großer Teil der Kopfsachen-App besteht aus den von Kopfsachen vorgegebenen Starkmachern. Diese erlauben es den Nutzern auf verschiedenen Wegen Probleme mit mentaler Gesundheit zu bewältigen bzw. vorzubeugen.
+Ein großer Teil der Kopfsachen-App besteht aus den von Kopfsachen vorgegebenen Starkmachern. Diese erlauben es den Nutzer:innen auf verschiedenen Wegen Probleme mit mentaler Gesundheit zu bewältigen bzw. vorzubeugen.
 
-Ein besonders wichtiger Starkmacher ist das Sicherheitsnetz. Dort trägt der Nutzer Themen, Personen, Aktivitäten etc. ein, die sich im tagtäglichen Leben positiv auf die mentale Gesundheit auswirken oder die im schlimmsten Fall ein "Auffangnetz" für den Nutzer bilden.
+Ein besonders wichtiger Starkmacher ist das Sicherheitsnetz. Dort tragen die Nutzer:innen Themen, Personen, Aktivitäten etc. ein, die sich im tagtäglichen Leben positiv auf die mentale Gesundheit auswirken oder die im schlimmsten Fall ein "Auffangnetz" bilden.
 
 
 ### Sicherheitsnetzeinträge im Frontend
-Zunächst wurde der Datentyp "SafetyDType" definiert, welcher die eingetragenen Daten des Nutzers durch den Erstellungsprozess eines Sicherheitsnetzeintrags trägt.
+Zunächst wurde der Datentyp "SafetyDType" definiert, welcher die eingetragenen Daten der Nutzer:innen durch den Erstellungsprozess eines Sicherheitsnetzeintrags trägt.
 SafetyNetDType besteht aus vier Teilen:
 
 ````tsx
@@ -212,20 +212,20 @@ export type SafetyNetDType = {
 ````
 
 1.  "id" ist eine im Backend generierte Nummer, die den Eintrag eindeutig identifiziert
-2.  "type" ist der vom Nutzer eingetragene Typ des Eintrags
-3.  "name" ist ist der vom Nutzer eingetragene Titel des Eintrags
+2.  "type" ist der von Nutzer:innen eingetragene Typ des Eintrags
+3.  "name" ist ist der von Nutzer:innen eingetragene Titel des Eintrags
 4.  "strategies" ist ein Array aus drei Strings, von denen mindestens einer ein nicht-leerer string sein muss
 
 
 ### Verwendung des Sicherheitsnetzes
 Die Erstellung eines Sicherheitsnetzeintrages in der App besteht aus zwei Schritten.
 
-Im ersten Schritt trägt der Nutzer einen Titel ein und wählt eine, von fünf möglichen, Kategorien für den Sicherheitsnetzeintrag.
-Der eingetragene Titel wird unter "name" gespeichert und das ausgewählte Icon bestimmt den "type" (z.B. Pfotenicon -> "type": "pets"). Nach Bestätigung durch den Nutzer wird überprüft ob ein "name" und "type" angegeben wurden und an den zweiten Schritt weitergeleitet.
+Im ersten Schritt tragen die Nutzer:innen einen Titel ein und wählt eine, von fünf möglichen, Kategorien für den Sicherheitsnetzeintrag.
+Der eingetragene Titel wird unter "name" gespeichert und das ausgewählte Icon bestimmt den "type" (z.B. Pfotenicon -> "type": "pets"). Nach Bestätigung wird überprüft ob ein "name" und "type" angegeben wurden und an den zweiten Schritt weitergeleitet.
 
 <img alt="Safety-Net step 1" src="assets/security-net1.jpg" height="500">
 
-Im zweiten Schritt trägt der Nutzer mindestens eine und maximal drei Strategien ein, wie dieser Sicherheitsnetzeintrag dem Nutzer helfen kann. Diese werden unter "strategies" gespeichert. Hier wird auch überprüft ob am Ende genug Daten (mindestens eine eingetragene Strategie) vorliegt.
+Im zweiten Schritt tragen die Nutzer:innen mindestens eine und maximal drei Strategien ein, wie dieser Sicherheitsnetzeintrag helfen kann. Diese werden unter "strategies" gespeichert. Hier wird auch überprüft ob am Ende genug Daten (mindestens eine eingetragene Strategie) vorliegt.
 
 <img alt="Safety-Net step 2" src="assets/security-net2.jpg" height="500">
 
@@ -284,13 +284,13 @@ export default class SecurityNetClient extends AuthenticatedBaseClient {
 
 ### Weitere Features im Sicherheitsnetz
 
-Zusätzlich zum Erstellen von Einträgen hat der Nutzer noch die Möglichkeit alle existierenden Einträge eines Types einzusehen und zu verändern bzw. löschen.
+Zusätzlich zum Erstellen von Einträgen haben die Nutzer:innen noch die Möglichkeit alle existierenden Einträge eines Types einzusehen und zu verändern bzw. löschen.
 
-Dafür holt sich der SecurityNetClient per GET-Request alle Einträge eines Nutzers. Diese werden dann nach Typ gefiltert und die resultierende Liste als Kachellayout angezeigt. Dort kann der Nutzer einen erstellten Eintrag auch wieder löschen. Dafür klickt der Nutzer das "X" am Eintrag im Kachellayout an. Daraufhin wird eine DELETE-Request an "safetyNet/{id}" gesendet, um den Eintrag im Backend zu löschen. "id" ist hierbei die dem Eintrag zugewiesene id.
+Dafür holt sich der SecurityNetClient per GET-Request alle Einträge eines/-r Nutzer:in. Diese werden dann nach Typ gefiltert und die resultierende Liste als Kachellayout angezeigt. Dort kann ein erstellter Eintrag auch wieder gelöscht werden. Dafür klicken die Nutzer:innen das "X" am Eintrag im Kachellayout an. Daraufhin wird eine DELETE-Request an "safetyNet/{id}" gesendet, um den Eintrag im Backend zu löschen. "id" ist hierbei die dem Eintrag zugewiesene id.
 
 <img alt="Safety-Net list of entries" src="assets/security-net_itemview.PNG" height="500">
 
-Zum Verändern eines Eintrags kann der Nutzer auf einen der Einträge im Kachellayout klicken und wird dann durch dieselben Schritte wie bei der Erstellung eines Eintrages geleitet.
+Zum Verändern eines Eintrags wird auf einen der Einträge im Kachellayout geklickt, woraufhin man durch dieselben Schritte wie bei der Erstellung eines Eintrages geleitet wird.
 Hierbei sind die Daten aus dem bestehenden Eintrag schon in die zugehörigen Felder eingetragen.
 Nach Beendigung wird überprüft, ob der Eintrag tatsächlich verändert wurde, und nur dann per PUT-Request an "/safetyNet/{id}" aktualisiert. Dadurch werden Verdopplungen von Einträgen vermieden.
 
