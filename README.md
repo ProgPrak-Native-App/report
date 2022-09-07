@@ -331,6 +331,98 @@ Um dies zu lösen, wurden zunächst dazu in der Gruppe mögliche Alternativen be
 Diese wurden darauf implementiert und in einer Pull-Request für die anderen Teams einsehbar gemacht.
 Die Alternative in der Pull-Request wurde sowohl auf Github überprüft als auch im "ProgPrak"-Channel auf Mattermost besprochen. Nachdem die vorgeschlagenen Änderungen von mehreren Seiten akzeptiert wurden, konnte die Pull-Request gemerged werden.
 
+## Markdown im Wiki
+
+Das Wiki der Kopfsachen-App soll den Nutzer:innen eine Vielzahl von Informationen zu Themen der mentalen Gesundheit und Stressbewältigung liefern.
+
+Jeder Artikel besitzt ID, Titel und Inhalt.
+Erst wurde der Inhalt vom Backend-Team in einem eigenen JSON-Format, als Liste von Elementen wie z.B. Text oder Hyperlink, entworfen.
+Da dieses Format einschränkend und schwer in seiner Quellform les- und verfassbar wäre, haben wir uns mit dem Backend-Team auf Markdown geeinigt.
+Für Markdown gibt es bereits exzellentes Tooling für React Web [[3], [4]].
+Auch für React Native gibt es Libraries [[5], [6]].
+Wir haben uns für [react-native-markdown-display] entschieden.
+Da der publizierte Stand jedoch nur React 16 unterstützt, mussten wir [einen Fork](https://github.com/jonasmerlin/react-native-markdown-display) verwenden, der das Projekt auf React 17 aktualisiert.
+
+Leider enthält die Library `.js`-Dateien, die Gebrauch von JSX syntax machen. 
+Die von Expo mitgelieferte Webpack-Konfiguration kann damit nicht umgehen, deshalb haben wie die Library [wiederum geforkt](https://github.com/ProgPrak-Native-App/react-native-markdown-display) und das JSX mithilfe von Babel zu reinem JS transpiliert.
+So konnten wie die Library verwenden und Markdown in unserer App rendern.
+
+### Akkordions
+
+Manche Wiki-Artikel, wie der zur "ALPEN-Methode", sind recht lang.
+Um einen besseren Überblick zu ermöglichen, wollten wir Artikel deshalb in Sektionen unterteilen und sie als einklappbare Akkordions darstellen.
+(U.a. verwendet die mobile Ansicht von Wikipedia auch diese Strategie.)
+
+Da das gleiche Markdown in den Web-Apps und auch in unserer mobilen App gerendert werden soll, können die Akkordions nicht fest im Markdown integriert werden.
+Stattdessen müssen wir jeweils den Inhalt nach einer Level-2-Überschrift bis zur Nächsten automatisch in ein Akkordion zusammenfassen.
+Um diese Idee zu implementieren, haben wir ein Plugin für react-native-markdown-display bzw. den zugrundeliegenden Parser markdown-it geschrieben, dass die Token-Liste des Markdowns anpasst.
+
+<table>
+<thead>
+<tr>
+<th>Vorher</th>
+<th>Nachher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+
+```json
+[
+  { "type": "heading_open", "tag": "h2" },
+  { "type": "inline", "content": "Section 1 Title" },
+  { "type": "heading_close" },
+  { "type": "inline", "content": "Section 1 Content" },
+  { "type": "heading_open", "tag": "h2" },
+  { "type": "inline", "content": "Section 2 Title" },
+  { "type": "heading_close" },
+  { "type": "inline", "content": "Section 2 Content" }
+]
+```
+
+</td>
+<td>
+
+```json
+[
+  { "type": "accordion_open", "content": "Section 1 Title" },
+  { "type": "inline", "content": "Section 1 Content" },
+  { "type": "accordion_close" },
+  { "type": "accordion_open", "content": "Section 2 Title" },
+  { "type": "inline", "content": "Section 2 Content" },
+  { "type": "accordion_close" }
+]
+```
+
+</td>
+</tr>
+<tr>
+<td>
+<img alt="Wiki-Artikel ohne Akkordions" src="assets/wiki-alpen-no-accordions.png" height="500">
+</td>
+<td>
+<img alt="Wiki-Artikel mit Akkordions" src="assets/wiki-alpen-accordions.png" height="500">
+</td>
+</tr>
+</tbody>
+</table>
+
+### Links auf andere Wiki-Artikel
+
+In Markdown werden Links u.a. in der Syntax `[Link-Text](URI)` definiert.
+Für Links auf Webseiten ist diese Syntax ohne weiteres von uns nutzbar, auf dem Gerät würde sich beim Tippen ein Webbrowser öffnen.
+Allerdings soll auch von Wiki-Artikeln auf andere Wiki-Artikel verlinkt werden können.
+
+Um das Antippen eines solchen Links in der App abzufangen und innerhalb der App zum korrekten Artikel zu navigieren, haben wir uns mit dem Backend-Team auf eine URI des Formats `kopfsachen:wiki/95zdf84rhfe84h` geeinigt, wobei der letzte Teil die ID des Artikels ist.
+Aktuell ist dieses Feature noch nicht in der App implementiert und es gibt keine Artikel, die es nutzen, react-native-markdown-display [unterstützt die Implementierung aber gut](https://github.com/ProgPrak-Native-App/react-native-markdown-display#handling-links). 
+
+[3]: https://github.com/remarkjs/react-markdown
+[4]: https://npm.io/search/keyword:markdown
+[5]: https://github.com/Benjamin-Dobell/react-native-markdown-view
+[6]: https://github.com/CharlesMangwa/react-native-simple-markdown
+[react-native-markdown-display]: https://github.com/iamacup/react-native-markdown-display
+
 ## TODO
 
 Entwickeln
