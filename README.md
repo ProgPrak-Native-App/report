@@ -31,16 +31,17 @@ Mitgebrachte Erfahrung aus dem Team - Da einige von uns schon Erfahrungen mit Re
 Vielzählige Libraries - Mit [NPM] als unser Package Manager stehen unserem Projekt damit mehr als [1100 Third Party Libraries](https://reactnative.directory) zur verfügung.
 
 Nach ein wenig Recherche sind wir ebenfalls auf [Expo] gestoßen, was uns die Entwicklung auf viele arten in der Zukunft erleichtern würde. 
-Expo ist eine Sammlung von Tools und Libraries, welche die schnelle Entwicklung in React Native unterstützt. Es vereinfacht den Build und Deploy Prozess unserer App immens was uns als agiles Scrum Team sehr entgegen kommt.
+Expo ist eine Sammlung von Tools und Libraries, welche die schnelle Entwicklung in React Native unterstützt. 
+Es vereinfacht den Build und Deploy Prozess immens was uns als agiles Scrum Team sehr entgegenkommt.
 
 ### TypeScript
 
 Ein weiterer Bonus Punkt für React Native war die Unterstützung von [TypeScript]. 
-Es ergänzt JavaScript um ein Statisches Typsystem. Damit weicht man Fehler aus, die daraus resultieren, dass JavaScript sonst dynamisch typisiert. 
+Es ergänzt JavaScript um ein Statisches Typsystem. Damit erspart man sich Fehler, die daraus resultieren, dass JavaScript sonst dynamisch typisiert. 
 Typen und Datentypfehler werden somit nicht erst zur Laufzeit geprüft und erkannt. Da nicht alle aus dem Team bereits Erfahrung mit JavaScript mitgebracht haben, hat uns TypeScript vermutlich einige Bugs und Flüchtigkeitsfehler erspart. 
 Zudem Dokumentiert TypeScript unseren Code implizit weil strikte Typen gesetzt werden müssen. Code, der für sich selbst spricht, erspart dem Team oft unnötige Verwirrung und macht es Außenstehenden leichter den Code zu verstehen.
 
-Initialisiert haben wir unser Projects mit Expo folgendermaßen:
+Initialisiert haben wir unser Projects mit der Expo CLI folgendermaßen:
 ```shell
 npm i -g expo-cli
 npx create-react-native-app -t with-typescript
@@ -51,31 +52,31 @@ Der `-t` Flag stellt viele Templates für die Initialisierung eines React Native
 ### ESLint und Prettier
 
 Im oberen Abschnitt hatten wir angesprochen, dass TypeScript uns bei der Lesbarkeit und Fehlerverbeugung im Code geholfen hat. 
-[ESLint] hat ähnliche Vorteile indem es den Code analysiert um Probleme oder Schwachstellen zu erkennen während man ihn schreibt, ohne ihn ausführen zu müssen.
+[ESLint] bringt ähnliche Vorteile, indem es den Code analysiert um Probleme oder Schwachstellen zu erkennen während man ihn schreibt, ohne ihn ausführen zu müssen.
 
-[Prettier] haben wir in unser Projekt integriert um unseren Source Code einheitlich zu Formatieren. Obwohl es zwar nett ist das jeder seinen eigenen Coding Stil hat, ist es nicht schlecht gewisse Konventionen und Standards im Team einzuhalten. 
-Mit Prettier kann man sich hier bspw. auf einheitliche Namens Konventionen einigen und im gesamten Projekt geltend machen. 
+[Prettier] haben wir in unser Projekt integriert um unseren Source Code einheitlich zu Formatieren. Obwohl es zwar nett ist, dass jeder seinen eigenen Coding Stil hat, ist es nicht schlecht gewisse Konventionen und Standards im Team einzuhalten. 
+Mit Prettier haben wir uns hier bspw. auf einheitliche Namens Konventionen einigen und im gesamten Projekt geltend machen. 
 
-ESLint und Prettier zusammen ersparen uns damit außerdem Zeit im Review was in der agilen Entwicklung natürlich immer willkommen ist.
+ESLint und Prettier zusammen ersparten uns damit außerdem Zeit im Review was in der agilen Entwicklung natürlich immer willkommen ist.
 
 
 ### Apple Developer Program
 
 Für die agile Entwicklung war es uns wichtig schnell Prototypen kreieren zu können. Diese sollten dann auch leicht teilbar bzw. testbar sein.
-Aus unserem React Native Projekt eine auf Android Geräte nutzbare `.APK` zu erstellen ist recht unkompliziert. Diese kann einfach signiert und gebaut werden. Das Resultat ist eine `.APK` welche verteilt und bspw. auf dem Android Emulator getestet werden kann.
+Aus unserem React Native Projekt eine auf Android Geräte nutzbare `.apk` zu erstellen ist recht unkompliziert. Diese kann einfach signiert und gebaut werden. Das Resultat ist eine `.apk` welche verteilt und bspw. auf dem Android Emulator getestet werden kann.
 
 Bei iOS ist es leider nicht so simpel. Um unsere App während der Entwicklung für iOS Geräte zu testen, muss eine `.ipa` gebaut werden. Diese kann dann bspw. im Review heruntergeladen und installiert werden. 
 Um dies zu tun muss die App im Build Prozess jedoch mit einem registrierten [Apple Developer Account] signiert werden. Die Lizenz dazu kann entweder als Einzelperson für 99€ erworben oder als Bildungseinrichtung kostenlos beantragt werden. Mehr Infos dazu [hier](https://developer.apple.com/programs/enroll/).
 
 Da wir wussten, es würde vermutlich eine Weile dauern um eine Apple Developer Lizenz zu beantragen, mussten wir uns überlegen wie wir trotzdem zeitnah in die iOS Entwicklung einsteigen können. Hier stießen wir die auf Option den iOS Simulator zu nutzen. 
 Auf diesem von Apple zur verfügung gestellten Simulator ist es möglich Builds in form einer .app zu installieren. Diese sind im Grunde ein Subset der `.ipa`, welche bestimmte Dateien nicht enthält, die für die Installation auf einem iOS Gerät notwendig sind. 
-Das gute an dem .app Build ist, dass sie keinen Apple Developer Account voraussetzt.
+Das gute an dem `.app` Build ist, dass sie keinen Apple Developer Account voraussetzt.
 
-Weil bei Apple aber nichts zu einfach sein darf, gibt es aber auch hier einen Hacken. Beides, `.ipa` und .app können nur mit Xcode gebaut werden. Xcode existiert jedoch nur auf macOS. 
-Da in unserem Team neben macOS auch Windows und Linux als bevorzugte Betriebssystem existieren kann nicht jeder im Team eine .app bauen. Hier hat uns erneut Expo weiterhelfen können.
+Weil bei Apple aber nichts zu einfach sein darf, gibt es aber auch hier einen Hacken. Beides, `.ipa` und `.app` können nur mit [Xcode] gebaut werden. Xcode existiert jedoch nur auf macOS. 
+Da in unserem Team neben macOS auch Windows und Linux als bevorzugte Betriebssystem existieren kann nicht jeder im Team eine `.app` bauen. Hier hat uns erneut Expo weiterhelfen können.
 
 Expo bietet uns neben dem Feature unsere App lokal zu bauen auch die Möglichkeit das Bauen komplett auf Serverseite zu erledigen. Dazu wird einfach ein Bundle aus dem Source Code erstellt welches auf Expo Server hochgeladen wird. 
-Hier wird je nach Einstellung eine von Expo signierte `.APK` oder .APP gebaut. Nach etwa 6 Minuten können diese dann einfach heruntergeladen werden. 
+Hier wird je nach Einstellung, eine von Expo signierte `.apk` oder `.app` gebaut. Nach etwa 6 Minuten können diese dann einfach heruntergeladen werden. 
 Somit konnte das gesamte Team unabhängig vom Betriebssystem Prototypen für Android und den iOS Simulator erstellen.
 
 Eine Apple Developer Lizenz zu beantragen verlief leider erfolglos. Die erste Option, die Lizenz als Bildungseinrichtung zu beantragen war nicht möglich, da nur die TU Berlin als gesamte Institution solche Lizenzen beantragen kann. 
@@ -483,6 +484,7 @@ Slides:
 [Prettier]: https://prettier.io
 [Apple Developer Account]: https://developer.apple.com
 [ZECM]: https://www.campusmanagement.tu-berlin.de/zecm/
+[Xcode]: https://developer.apple.com/xcode/
 ## Termine
 
 > - Morgen (15.8.) wird kein Meeting stattfinden, obwohl es ein Montag ist
