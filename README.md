@@ -76,7 +76,10 @@ Die Umsetzung erfolgte mithilfe von Markdown Dateien, welche im Backend hinterle
 
 Des Weiteren wurde sich dafür entschieden, das Design für eine möglichst barrierefreie Nutzung zu optimieren. Hierfür wurden die Richtlinien der [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/) sowie von [Matarial.io](https://material.io/design/usability/accessibility.html), da dies primär eine für Android entwickelte App ist, umgesetzt. Diese Standards beinhalteten unter anderem Vorgaben für Farbkontraste, Abstände, Größen und Beschriftungen.
 
-In der nachfolgenden Grafik kann die Umsetzung dieser Richtlinien nachvollzogen werden.
+In der nachfolgenden Grafiken kann die Umsetzung dieser Richtlinien nachvollzogen werden.
+
+<img alt="abstand" src="assets/abstand.png" height="400">
+<img alt="wiki" src="assets/wiki.png" height="400">
 
 Für die Entwicklung wurden diese Vorgaben als globale Konstanten angelegt, sodass diese
 immer schnell zur Hand waren.
