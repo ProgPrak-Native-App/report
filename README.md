@@ -63,9 +63,11 @@ Bei der Unterteilung wurde sich an das Designprinzipen _Gestalt der Ähnlichkeit
 
 Somit konnten den Nutzender:innen die wichtigsten Informationen geordnet zuerst präsentiert werden, sodass die Aufgabe, effektiv, effizient sowie zufriedenstellen lösbar ist.
 
+<p>
 <img alt="Soziale Unterstuetzung Redesign Onboarding" src="assets/sozial_onboarding.png" height="400">
 <img alt="Soziale Unterstuetzung Redesign Kreis 1" src="assets/kreis_01.png" height="400">
 <img alt="Soziale Unterstuetzung Redesign Kreis 3" src="assets/kreis_03.png" height="400">
+</p>
 
 Eine weitere benutzerfreundliche Umgestaltung spiegelt sich im Wiki wider. Hier war die Herausforderung, das Design für mobiles Lesen zu optimieren.
 
@@ -78,8 +80,10 @@ Des Weiteren wurde sich dafür entschieden, das Design für eine möglichst barr
 
 In der nachfolgenden Grafiken kann die Umsetzung dieser Richtlinien nachvollzogen werden.
 
+<p>
 <img alt="abstand" src="assets/abstand.png" height="400">
 <img alt="wiki" src="assets/wiki.png" height="400">
+</p>
 
 Für die Entwicklung wurden diese Vorgaben als globale Konstanten angelegt, sodass diese
 immer schnell zur Hand waren.
@@ -197,13 +201,13 @@ Um aus diesem Feature den besten Nutzen zu schlagen, sollten auch in die Webanwe
 
 Außerdem sollte, für den Fall, dass die Kamera des genutzten Smartphones kaputt ist oder anderweitig nicht genutzt werden kann, die Option zur manuellen Eingabe des Account Keys gegeben werden. Dazu haben wir bereits einen Knopf hinzugefügt, der aber noch keine Funktion hat.
 
+<p>
 <img alt="First start screenshot" src="assets/user-setup.png" height="500">
 <img alt="QR code scanner screenshot" src="assets/scanner.png" height="500">
 
-<br/>
-
 <img alt="Profile overview" src="assets/profile-overview.png" height="500">
 <img alt="QR code" src="assets/profile-export.png" height="500">
+</p>
 
 [1]: https://www.npmjs.com/package/react-native-qrcode
 [2]: https://www.npmjs.com/package/react-native-qrcode-svg
