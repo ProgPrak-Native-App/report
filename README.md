@@ -1,19 +1,45 @@
-# DaWeSys Technical Report
+# Entwicklung einer App zur mentalen Unterstützung Jugendlicher
 
-<!-- TODO: Inhaltsverzeichnis, wenn fertig. -->
+**Mit React Native, Expo und TypeScript.** Technischer Abschlussbericht zum Programmierpraktikum "Datenmanagement und Web-basierte Anwendungssysteme", Sommersemester 2022.
+
+**Gruppe**: Dino, Jonah, Ludwig, Max, Oscar, Simon
+<br/>
+**Autoren**: Dino, Jonah, Ludwig, Max, Oscar
+
+* [Tech Stack](#tech-stack)
+  * [React Native und Expo](#react-native-und-expo)
+  * [TypeScript](#typescript)
+  * [ESLint und Prettier](#eslint-und-prettier)
+  * [Apple Developer Program](#apple-developer-program)
+* [Continuous Integration / Continuous Delivery](#continuous-integration--continuous-delivery)
+  * [Publish](#publish)
+  * [Android/iOS Build](#androidios-build)
+  * [Linting](#linting)
+  * [Release / CD](#release--cd)
+  * [Testing](#testing)
+* [Design](#design)
+* [Authentifizierung](#authentifizierung)
+  * [React Context](#react-context)
+  * [Authentifizierung-API-Flow](#authentifizierung-api-flow)
+* [Derselbe Account auf mehreren Geräten](#derselbe-account-auf-mehreren-ger%C3%A4ten)
+  * [Implementierung](#implementierung)
+    * [Anzeigen des QR-Codes](#anzeigen-des-qr-codes)
+    * [Scannen des-QR Codes](#scannen-des-qr-codes)
+  * [Weiterentwicklung](#weiterentwicklung)
+* [Sicherheitsnetz](#sicherheitsnetz)
+  * [Sicherheitsnetzeinträge im Frontend](#sicherheitsnetzeintr%C3%A4ge-im-frontend)
+  * [Verwendung des Sicherheitsnetzes](#verwendung-des-sicherheitsnetzes)
+  * [Kommunikation mit dem Backend](#kommunikation-mit-dem-backend)
+  * [Weitere Features im Sicherheitsnetz](#weitere-features-im-sicherheitsnetz)
+  * [Hürden bei der Implementierung](#h%C3%BCrden-bei-der-implementierung)
+* [Markdown im Wiki](#markdown-im-wiki)
+  * [Akkordions](#akkordions)
+  * [Links auf andere Wiki-Artikel](#links-auf-andere-wiki-artikel)
+* [Release](#release)
+  * [GitHub](#github)
+  * [Expo Go](#expo-go)
 
 ## Tech Stack
-
-- **Wer?** Oscar
-- Grundlegende Entscheidungen ([Midterm slides] 5-8)
-  - Android
-  - Expo
-  - React Native
-  - Typescript
-- warum? was macht die Technologie/ wie funktioniert sie? Unsere Erfahrung mit ihrer Anwendung
-- Was für Privacy Conerncs gab es aufgrunddessen, dass es sich um eine Health Application handelt. Wie haben sich diese auf die Wahl von Technologien und oder Architektur der Applikation ausgewirkt. (Storage, Cloud, Backups,..)
-- Apple Dev Account Problematik erklären
-- Prettier / ESLint
 
 ### React Native und Expo
 
@@ -82,8 +108,6 @@ Somit konnte das gesamte Team unabhängig vom Betriebssystem Prototypen für And
 Eine Apple Developer Lizenz zu beantragen verlief leider erfolglos. Die erste Option, die Lizenz als Bildungseinrichtung zu beantragen war nicht möglich, da nur die TU Berlin als gesamte Institution solche Lizenzen beantragen kann. 
 Das ist der [ZECM] leider nicht möglich. Die zweite Option, die Lizenz als Einzelperson zu finanzieren war ebenfalls nicht möglich, da wir Apple als eine juristische Person auftreten müssten. Abgesehen davon würde dies wohl etwas 8 Wochen in Anspruch nehmen. 
 Daher war es uns leider nie möglich unsere App als `.ipa` auf einem realen iPhone oder iPad zu testen.
-
-## ~~Organisation / Agile Entwicklung (GH Projekte) - (Nochmal Elias fragen ob das in den Report gehört - tut es nicht)~~
 
 ## Continuous Integration / Continuous Delivery
 
@@ -228,8 +252,6 @@ Dieser kann dazu genutzt werden ausführlich zu erklären was passiert, wenn Use
 
 ## Authentifizierung
 
-**Wer?** Ludwig
-
 Bei der Implementierung der Authentifizierung musste sowohl auf die Vorgaben des Auftraggebers Kopfsachen, als auch auf die Spezifikation des Backends Rücksicht genommen werden.
 
 Kopfsachen wünscht sich eine einmalige Einleitung in die App. Einleitend wird der User bei der erstmaligen Öffnung der App auf einem Willkommens Bildschirm landen. Hier wird der User durch eine Erklärung in den allgemeinen Nutzen und die Funktionen der App eingeführt.
@@ -238,7 +260,7 @@ Wenn sich der User weiter durch die Einleitung klickt, landet er auf einer weite
 
 Das Backend gibt nach dem abgeschlossenen Authentifizierung-API-Flow einen accountKey zurück, welcher dem User eindeutig zugeordnet ist.
 
-### React Context:
+### React Context
 
 Um den accountKey in verschiedenen Bereichen der App benutzen zu können, wurde bei der Implementierung React Context benutzt. React Context ermöglicht es Daten innerhalb der App in verschiedenen Komponenten zu benutzen, ohne diese über Props von Komponente zu Komponente explizit zu übertragen. Ein Vorteil davon ist, dass accountKey nur in den Komponenten benutzt wird, die dafür auch vorgesehen sind.
 
@@ -250,7 +272,7 @@ In der Komponente AppWrapper wird der Context benutzt um das bedingte Anzeigen d
 
 Mit Hilfe der Funktion useEffect von React wird bei unserer Implementierung der localStore (umgesetzt mit SecureStore von Expo) automatisch erneuert, wenn sich der accountKey ändert, sodass der accountKey im globalen Kontext persistiert wird.
 
-### Authentifizierung-API-Flow:
+### Authentifizierung-API-Flow
 
 Der API-Flow für die Authentifizierung läuft folgendermaßen ab:
 
@@ -286,7 +308,7 @@ QRCode.toString(`kopfsachen:account/${accountKey}`).then(setQrCodeXml);
 return <SvgXml xml={qrCodeXml} />;
 ```
 
-### Scannen des-QR Codes
+#### Scannen des-QR Codes
 
 Expo stellt die Library [expo-barcode-scanner] bereit, die neben Barcodes und einer Reihe anderer Formate auch QR-Codes lesen kann. Dabei kann die Kameravorschau einfach als React-Komponente eingebunden werden. Wird ein Code jedweder Art erkannt, wird ein Callback aufgerufen.
 
@@ -525,31 +547,6 @@ Um unsere App lokal auszuprobieren, können hier entweder eine `.apk` für Andro
 Im [README] ist außerdem der QR Code zu unerem neusten Release zu finden. 
 Dieser kann einfach mit der [Expo Go] App gescannt werden um den Release lokal auszuführen.
 
-## TODO
-
-Entwickeln
-
-- ~~E2E-Tests~~ :x:
-- Authentifizierung :heavy_check_mark:
-- QR-Code :heavy_check_mark:
-- Polishen
-
-Ideen generieren
-
-- woran habe ich über das Semester gearbeitet? Was ist diskussionswürdig/ interessant?
-- z.B. Zusammenarbeit untereinander/mit anderen Teams; Hürden/Dinge die gut gelaufen sind
-
-Beispiele von Elias
-
-- https://medium.com/swlh/how-to-write-a-technical-article-and-be-read-ccbecd30a66c
-- https://medium.com/@weblab_tech/graphql-everything-you-need-to-know-58756ff253d8
-- https://blogonyourown.com/tech-blogs
-
-Slides:
-
-- [Midterm slides]
-- [Final slides]
-
 [midterm slides]: https://docs.google.com/presentation/d/1NGj9W046PPFRzViuPo1Oqs9OgjPQGymZTuSad5sK_3A/edit
 [final slides]: https://docs.google.com/presentation/d/1UYDbpvOzaAlohBbl47hufxIubeY6l2X04z7tfMnBxt0/edit
 [NPM]: https://www.npmjs.com
@@ -565,12 +562,3 @@ Slides:
 [GitHub Releases]: https://github.com/ProgPrak-Native-App/react-native-app/releases
 [README]: https://github.com/ProgPrak-Native-App/react-native-app/blob/develop/README.md
 [Expo Go]: https://expo.dev/client
-## Termine
-
-> - Morgen (15.8.) wird kein Meeting stattfinden, obwohl es ein Montag ist
-> - Am darauffolgenden Montag (22.8.) machen wir regulär ein Meeting, auch, wenn es vermutlich nicht super viel zu besprechen gibt
-> - Ungefähr am 26.8. (Fr) - 29.8. (Mo) sollte die Entwicklung so ziemlich abgeschlossen sein. Dann setzen wir uns zusammen, um in der App nocheinmal alle Features durchzugehen, um etwaige Bugs und Ungereimtheiten zusammenzutragen
-> - Am 5.9. (Montag vor der Abgabe) sollte sich der Report dem Ende nähern. Dann setzen wir uns nocheinmal zusammen, um alles durchzugehen.
-> - Am 9.9. ist die Abgabe. Dazu schicken wir Elias einen Link zu einem (neuen) GitHub-Repo mit unserem Report als README.md.
-
-###### tags: `uni`
