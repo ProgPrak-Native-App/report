@@ -359,7 +359,7 @@ Da das gleiche Markdown in den Web-Apps und auch in unserer mobilen App gerender
 Stattdessen müssen wir jeweils den Inhalt nach einer Level-2-Überschrift bis zur Nächsten automatisch in ein Akkordion zusammenfassen.
 Um diese Idee zu implementieren, haben wir ein Plugin für react-native-markdown-display bzw. den zugrundeliegenden Parser markdown-it geschrieben, dass die Token-Liste des Markdowns anpasst.
 
-<img alt="Akkordion Plugin Funktionsweise" src="assets/markdown-accordion-graph.svg">
+<img alt="Akkordion Plugin Funktionsweise" src="assets/markdown-accordion-graph.svg" height="300">
 
 ### Links auf andere Wiki-Artikel
 
