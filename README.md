@@ -448,6 +448,20 @@ Aktuell ist dieses Feature noch nicht in der App implementiert und es gibt keine
 [6]: https://github.com/CharlesMangwa/react-native-simple-markdown
 [react-native-markdown-display]: https://github.com/iamacup/react-native-markdown-display
 
+## Release
+
+### GitHub
+
+Recht früh haben wir GitHub Actions in unserem Projekt integriert. 
+Als Teil unserer Pipeline wird unser Release Prozess automatisiert ausgeführt und ist dann in unseren [GitHub Releases] zu finden.
+Seit Begin des Projekts haben wir insgesamt drei Releases veröffentlicht. 
+Um unsere App lokal auszuprobieren, können hier entweder eine `.apk` für Android und eine`.app` für den iOS Simulator heruntergeladen werden.
+
+### Expo Go
+
+Der neuste Release kann außerdem mit der [Expo Go] App ausgeführt und ausprobiert werden. 
+Dazu kann einfach der QR Code im [README] gescannt werden.
+
 ## TODO
 
 Entwickeln
@@ -485,6 +499,9 @@ Slides:
 [Apple Developer Account]: https://developer.apple.com
 [ZECM]: https://www.campusmanagement.tu-berlin.de/zecm/
 [Xcode]: https://developer.apple.com/xcode/
+[GitHub Releases]: https://github.com/ProgPrak-Native-App/react-native-app/releases
+[README]: https://github.com/ProgPrak-Native-App/react-native-app/blob/develop/README.md
+[Expo Go]: https://expo.dev/client
 ## Termine
 
 > - Morgen (15.8.) wird kein Meeting stattfinden, obwohl es ein Montag ist
