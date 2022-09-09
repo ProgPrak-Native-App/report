@@ -17,21 +17,84 @@
 
 ## ~~Organisation / Agile Entwicklung (GH Projekte) - (Nochmal Elias fragen ob das in den Report gehört - tut es nicht)~~
 
-## CI
+## Continuous Integration / Continuous Delivery
 
-- **Wer?** Oscar oder Max
-- [Midterm slides] 12-19
+Um unsere Zusammenarbeit in unserem Git-Repository zu organisieren und effektiv parallel an derselben Codebasis zu arbeiten, haben wir uns am weit verbreiteten [Git Flow] Workflow orientiert.
+Dabei beginnen wir die Arbeit an einem Feature (oder einer anderen geplanten Änderung), indem wir einen neuen Feature-Branch auf Basis von develop erstellen.
+Nach Fertigstellung des Features wird ein Pull Request erstellt.
+Darauf reviewen andere Mitglieder der Gruppe die Änderungen, die dann in den develop-Branch zurück gemergt werden.
+Dadurch enthält der develop-Branch immer alle fertigen Features.
 
-## Testing
+Dieser Prozess hat so aber noch zwei Nachteile:
+* Reviewer müssen PRs selbst auschecken und lokal bauen, um sie zu testen. Das schließt auch aus, dass nicht-Entwickler:innen Änderungen reviewen.
+* Es ist nicht garantiert, dass die Features, die zuvor einzeln auf ihren Branches funktioniert haben, auch korrekt zusammenspielen, nachdem sie in develop gemergt sind.
 
-- **Wer?** Simon oder Max
-- [Final slides] 7-10
-- Frameworkwahl und ihre Vor-/Nachteile (Jest/Jasmin,..)
-- Welches Framework für welche Art von Test
-  - E2E
-  - Snapshot
-  - Unit Test?
-- Umsetzung der Test mit Codebeispielen
+Um diese Punkte zu lösen, haben wir einen CI-Workflow entwickelt. 
+Dafür haben wir [GitHub Actions] verwendet, da wir bereits GitHub benutzen und Actions für öffentliche Repositories unbegrenzt kostenlos ist.
+Der Workflow hat mehrere Jobs, die bei jedem Push auf bestimmte Branches laufen:
+
+<img alt="CI/CD Workflow Graph" src="assets/ci-graph.png" >
+
+### Publish
+
+React Native Apps bestehen aus einem nativen Teil, der plattformabhängig ist, und einem JavaScript-Teil.
+Der native Teil ändert sich nur, wenn auch native Komponenten geändert werden, was sich auf ein Minimum beschränken sollte.
+Immerhin verwendet man React Native, um die App in JavaScript zu schreiben und Plattform-Spezifika wegzuabstrahieren.
+Deshalb bietet Expo ein Feature, um den JavaScript-Teil separat vom nativen Teil zu aktualisieren.
+Dieses Feature bringt auch die Möglichkeit, den JavaScript-Teil gar nicht in der eigenen nativen Hülle auszuführen, sondern in der "Expo Go" app.
+
+<img alt="QR code for EAS update branch 'develop'" src="https://qr.expo.dev/eas-update?projectId=2ed357a3-8d38-431d-bfaa-a6ed64e89caf&channel=develop&runtimeVersion=exposdk:46.0.0&appScheme=exp" height="200" align="right">
+
+In unserer CI benutzen wir eben dieses Feature, um den Review-Prozess zu erleichtern.
+<small>("EAS Updates" hat in der neuen Expo SDK v46 das alte "Expo Publish" ersetzt, beide funktionieren allerdings sehr ähnlich.)</small>
+Nach dem Hochladen des JavaScript-Bundles mit dem Befehl `eas update --auto` kann ein Link zu einem QR-Code erstellt werden, der mit der Expo Go app gescannt werden kann, um den aktuellen Stand des Branches zu öffnen.
+Der rechte QR-Code verweist auf den aktuellen Stand des develop-Branches.
+Bei Pull Requests wird der QR-Code in einem Kommentar hinzugefügt und kann von dort gescannt werden.
+
+### Android/iOS Build
+
+Der JavaScript-Teil einer einmal installierten App kann zwar mithilfe von EAS updates automatisch aktualisiert werden, jedoch ist für die Installation selbst und für native Änderungen ein App-Paket nötig.
+Im Falle von Android bauen wir eine APK, die auf einem echten Gerät oder dem Android Emulator installiert werden kann. 
+Bei iOS wäre das Pendant dazu eine IPA.
+Aufgrund dessen, dass wir, wie bereits erwähnt, keine Apple Developer Lizenz haben, können wir aber leider nur einen `.app`-Ordner bauen, der nur im iOS-Emulator ausgeführt werden kann.
+
+### Linting
+
+Auch ESLint führen wir in der CI bei jedem Push aus.
+Warnungen und Fehler sind dann mithilfe der GitHub Action [eslint-annotate-action] direkt als sogenannte Annotations in GitHub an den betroffenen Code-Zeilen sichtbar.
+Das hilft uns dabei, Code Smells und mögliche Fehlerquellen schnell zu erkennen und einen konsistenten Code-Style beizubehalten.
+
+<img alt="Eine ESLint annotation unserer CI" src="assets/ci-eslint-annotation.png">
+
+### Release / CD 
+
+Zwar wäre es auch möglich den Stand des develop-Branches zu bestimmten Zeitpunkten zu Google Play bzw. zum Apple Store hochzuladen, jedoch hat Git Flow auch hier einen besseren Prozess:
+Will das Team vom Stand des develop-Branches ein Release erstellen, wird ein Release-Branch namens `release/x.y.z` erstellt, wobei `x.y.z` die Versionsnummer der neuen Version ist.
+Auf diesem Branch wird dann die Version in der `package.json` angehoben und die App wird getestet.
+Nach etwaigen Nachbesserungen wird dieser Branch dann sowohl in den main-Branch als auch in den develop-Branch gemergt.
+Auf dem main-Branch wird dieser Stand dann mit dem Tag `vx.y.z` versehen, um das Release fest zu markieren.
+
+Auch diesen Prozess haben wir mithilfe von GitHub Actions teilweise automatisiert:
+Zum Erstellen des Release-Branches und Anheben der Versionsnummer startet man den Workflow `release-start`, und zum mergen in main und develop und taggen den `release-finish` Workflow.
+
+Nachdem der `release-finish`-Workflow das Release in den main-Branch gemergt und getaggt hat, läuft dort neben den bereits erwähnten CI-Jobs auch der Release-Job, der die APK und `.app` in einem GitHub-Release publiziert.
+An dieser Stelle soll die neue Version der App zukünftig Mal automatisch zu Google Play und zum Apple Store eingereicht werden, um echte Continuous Delivery (CD) zu schaffen.
+
+### Testing
+
+Zu einer guten modernen CI/CD-Pipeline gehören auch verschiedene Formen von Testautomatisierung.
+Leider war die Zeit des Praktikums nicht ausreichend, um sowohl einen Großteil des geplanten Feature-Sets als auch eine zufriedenstellende Testabdeckung herzustellen, und wir haben uns für ersteres entschieden.
+Es gibt einen aktuell noch nicht gemergten Pull Request (ProgPrak-Native-App/react-native-app#76) mit Jest Unit-Test-Konfiguration und einem Proof-of-Concept [Snapshot Test](https://jestjs.io/docs/snapshot-testing).
+
+Außerdem haben wir versucht, End-to-End Tests mithilfe des Frameworks Appium zu schreiben, jedoch erwies sich Appium als unzuverlässig. 
+Es war uns nicht möglich, funktionierende Tests zu schreiben, bevor wir abbrechen mussten, um uns auf wichtigere Aufgaben zu konzentrieren. (ProgPrak-Native-App/react-native-app#73)
+
+Beide dieser Ansätze sollten noch einmal aufgegriffen werden, falls die App weiterentwickelt wird.
+Für E2E-Testing gibt es ein besser auf React Native angepasstes Framework namens [Detox](https://github.com/wix/detox), das allerdings Probleme bei der Integration mit Expo verspricht.
+
+[Git Flow]: https://nvie.com/posts/a-successful-git-branching-model
+[eslint-annotate-action]: https://github.com/ataylorme/eslint-annotate-action
+[GitHub Actions]: https://github.com/features/actions
 
 ## Design
 
