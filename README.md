@@ -333,6 +333,8 @@ Die Alternative in der Pull-Request wurde sowohl auf Github überprüft als auch
 
 ## Markdown im Wiki
 
+<img alt="Wiki-Artikel mit Akkordions" src="assets/wiki-alpen-accordions.png" height="500" align="right" style="margin-left: 5%">
+
 Das Wiki der Kopfsachen-App soll den Nutzer:innen eine Vielzahl von Informationen zu Themen der mentalen Gesundheit und Stressbewältigung liefern.
 
 Jeder Artikel besitzt ID, Titel und Inhalt.
@@ -357,56 +359,7 @@ Da das gleiche Markdown in den Web-Apps und auch in unserer mobilen App gerender
 Stattdessen müssen wir jeweils den Inhalt nach einer Level-2-Überschrift bis zur Nächsten automatisch in ein Akkordion zusammenfassen.
 Um diese Idee zu implementieren, haben wir ein Plugin für react-native-markdown-display bzw. den zugrundeliegenden Parser markdown-it geschrieben, dass die Token-Liste des Markdowns anpasst.
 
-<table>
-<thead>
-<tr>
-<th>Vorher</th>
-<th>Nachher</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-
-```json
-[
-  { "type": "heading_open", "tag": "h2" },
-  { "type": "inline", "content": "Section 1 Title" },
-  { "type": "heading_close" },
-  { "type": "inline", "content": "Section 1 Content" },
-  { "type": "heading_open", "tag": "h2" },
-  { "type": "inline", "content": "Section 2 Title" },
-  { "type": "heading_close" },
-  { "type": "inline", "content": "Section 2 Content" }
-]
-```
-
-</td>
-<td>
-
-```json
-[
-  { "type": "accordion_open", "content": "Section 1 Title" },
-  { "type": "inline", "content": "Section 1 Content" },
-  { "type": "accordion_close" },
-  { "type": "accordion_open", "content": "Section 2 Title" },
-  { "type": "inline", "content": "Section 2 Content" },
-  { "type": "accordion_close" }
-]
-```
-
-</td>
-</tr>
-<tr>
-<td>
-<img alt="Wiki-Artikel ohne Akkordions" src="assets/wiki-alpen-no-accordions.png" height="500">
-</td>
-<td>
-<img alt="Wiki-Artikel mit Akkordions" src="assets/wiki-alpen-accordions.png" height="500">
-</td>
-</tr>
-</tbody>
-</table>
+<img alt="Akkordion Plugin Funktionsweise" src="assets/markdown-accordion-graph.svg">
 
 ### Links auf andere Wiki-Artikel
 
