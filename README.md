@@ -522,8 +522,8 @@ Um unsere App lokal auszuprobieren, können hier entweder eine `.apk` für Andro
 
 ### Expo Go
 
-Der neuste Release kann außerdem mit der [Expo Go] App ausgeführt und ausprobiert werden. 
-Dazu kann einfach der QR Code im [README] gescannt werden.
+Im [README] ist außerdem der QR Code zu unerem neusten Release zu finden. 
+Dieser kann einfach mit der [Expo Go] App gescannt werden um den Release lokal auszuführen.
 
 ## TODO
 
